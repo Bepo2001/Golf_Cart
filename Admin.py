@@ -1,17 +1,55 @@
 import tkinter as tk
+from tkinter import messagebox
+import csv  # For CSV backup (you may need to install the 'csv' module)
 
-class Admin:
-   def __init__(self):
-      self.window = tk.Tk()
-      self.window.title("Admin")
-      self.window.geometry('800x800')
+class AdminWindow:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Admin Panel")
 
-      self.buttonBack = tk.Button(self.window, text='Logout', command=self.logout)
+        # Labels
+        tk.Label(master, text="Golf Cart Plate Number:").grid(row=0, column=0, sticky="e")
+        tk.Label(master, text="College:").grid(row=1, column=0, sticky="e")
 
-      self.buttonBack.pack()
-      self.window.mainloop()
+        # Entry widgets
+        self.plate_number_entry = tk.Entry(master)
+        self.college_entry = tk.Entry(master)
 
-   def logout(self):
-      self.window.destroy()
-      import Signup
-      Signup.Signup()
+        # Grid layout for entry widgets
+        self.plate_number_entry.grid(row=0, column=1)
+        self.college_entry.grid(row=1, column=1)
+
+        # Buttons
+        tk.Button(master, text="Create", command=self.create_record).grid(row=2, column=0, columnspan=2)
+        tk.Button(master, text="Logout", command=self.logout).grid(row=3, column=0, columnspan=2)
+        tk.Button(master, text="Backup", command=self.backup).grid(row=4, column=0, columnspan=2)
+
+    def create_record(self):
+        # Dummy: Send information to the central database (replace with actual database interaction)
+        plate_number = self.plate_number_entry.get()
+        college = self.college_entry.get()
+
+        # Dummy: Print information (replace with actual database insertion)
+        print(f"Record Created:\nPlate Number: {plate_number}\nCollege: {college}")
+
+    def logout(self):
+        # Add logic to go back to the sign-up window or login window
+        pass
+
+    def backup(self):
+        # Dummy: Backup information to a CSV file (replace with actual database backup)
+        data_to_backup = [["Plate Number", "College"],
+                          [self.plate_number_entry.get(), self.college_entry.get()]]
+
+        with open('backup.csv', 'w', newline='') as csvfile:
+            csvwriter = csv.writer(csvfile)
+            csvwriter.writerows(data_to_backup)
+
+        messagebox.showinfo("Backup", "Backup successful. Data saved to 'backup.csv'.")
+
+# Create the main application window
+root = tk.Tk()
+app = AdminWindow(root)
+
+# Run the application
+root.mainloop()
