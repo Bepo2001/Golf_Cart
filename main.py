@@ -1,4 +1,5 @@
 import tkinter
+from tkinter import ttk
 
 class app:
     def init(self):
@@ -14,3 +15,8 @@ class app:
         tkinter.Button(self.iframe, text="Login", width=10).grid(row=1, column=1, pady=10)
 
         self.main.mainloop()
+
+
+     def change_page(self, page_name):
+         self.current_page.frame.destroy()
+         self.current_page = page_name(self)
