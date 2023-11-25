@@ -4,6 +4,8 @@ from tkinter import ttk
 
 
 
+#Admin id 4431015210, pass 12301230
+#Student ID 1111111111, Pass 12301230
 
 conn = sqlite3.connect("GolfDataBase.db")
 conn.execute('''CREATE TABLE IF NOT EXISTS UserData
