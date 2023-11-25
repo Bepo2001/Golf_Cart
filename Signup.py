@@ -49,9 +49,7 @@ class SignUpWindow:
         hashed_password = hashlib.sha256(self.password_entry.get().encode()).hexdigest()
 
 
-        if self.check_existing_user():
-            messagebox.showerror("Error", "User already registered.")
-            return
+
 
 
         print(f"User Information:\n"
@@ -64,12 +62,14 @@ class SignUpWindow:
 
         conn = sqlite3.connect("GolfDataBase.db")
 
+        try:
+            insertion = "INSERT INTO UserData (ID, FName, LName, UserClass, Password, Email, PhoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?)"
 
-        insertion = "INSERT INTO USERDATA (ID, FName, LName, UserClass, Password, Email, PhoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?)"
-
-        insertionValues = (self.id_entry.get(), self.first_name_entry.get(), self.last_name_entry.get(), self.user_class_entry.get(), hashed_password, self.email_entry.get(), self.phone_entry.get())
-        conn.execute(insertion, insertionValues)
-        conn.commit()
+            insertionValues = (self.id_entry.get(), self.first_name_entry.get(), self.last_name_entry.get(), self.user_class_entry.get(), hashed_password, self.email_entry.get(), self.phone_entry.get())
+            conn.execute(insertion, insertionValues)
+            conn.commit()
+        except sqlite3.IntegrityError:
+            messagebox.showerror("Error", "Account Already Exists!")
         conn.close()
 
     def login(self):
@@ -90,14 +90,8 @@ class SignUpWindow:
             messagebox.showerror("Error", "Invalid phone number format.")
             return False
 
-        # Add more validation as needed
-
         return True
 
-    def check_existing_user(self):
-        # Dummy check for existing user (replace with actual database check)
-        # For now, assume user doesn't exist
-        return False
 
 # Create the main application window
 root = tk.Tk()
