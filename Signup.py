@@ -7,25 +7,26 @@ import sqlite3
 class SignUpWindow:
     def __init__(self, main):
         self.main = main
-        self.main.title("Sign Up")
+        self.frame = tk.Frame(self.main)
+        self.frame.grid()
 
 
-        tk.Label(main, text="First Name:").grid(row=0, column=0, sticky="e")
-        tk.Label(main, text="Last Name:").grid(row=1, column=0, sticky="e")
-        tk.Label(main, text="User Class:").grid(row=2, column=0, sticky="e")
-        tk.Label(main, text="Student ID:").grid(row=3, column=0, sticky="e")
-        tk.Label(main, text="Password:").grid(row=5, column=0, sticky="e")
-        tk.Label(main, text="Email:").grid(row=6, column=0, sticky="e")
-        tk.Label(main, text="Phone Number:").grid(row=7, column=0, sticky="e")
+        tk.Label(self.frame, text="First Name:").grid(row=0, column=0, sticky="e")
+        tk.Label(self.frame, text="Last Name:").grid(row=1, column=0, sticky="e")
+        tk.Label(self.frame, text="User Class:").grid(row=2, column=0, sticky="e")
+        tk.Label(self.frame, text="Student ID:").grid(row=3, column=0, sticky="e")
+        tk.Label(self.frame, text="Password:").grid(row=5, column=0, sticky="e")
+        tk.Label(self.frame, text="Email:").grid(row=6, column=0, sticky="e")
+        tk.Label(self.frame, text="Phone Number:").grid(row=7, column=0, sticky="e")
 
 
-        self.first_name_entry = tk.Entry(main)
-        self.last_name_entry = tk.Entry(main)
-        self.user_class_entry = tk.Entry(main)
-        self.id_entry = tk.Entry(main)
-        self.password_entry = tk.Entry(main, show="*")  # Hide password
-        self.email_entry = tk.Entry(main)
-        self.phone_entry = tk.Entry(main)
+        self.first_name_entry = tk.Entry(self.frame)
+        self.last_name_entry = tk.Entry(self.frame)
+        self.user_class_entry = tk.Entry(self.frame)
+        self.id_entry = tk.Entry(self.frame)
+        self.password_entry = tk.Entry(self.frame, show="*")  # Hide password
+        self.email_entry = tk.Entry(self.frame)
+        self.phone_entry = tk.Entry(self.frame)
 
 
         self.first_name_entry.grid(row=0, column=1)
@@ -37,8 +38,8 @@ class SignUpWindow:
         self.phone_entry.grid(row=7, column=1)
 
 
-        tk.Button(main, text="Submit", command=self.submit).grid(row=8, column=0, columnspan=2)
-        tk.Button(main, text="Login", command=self.login).grid(row=9, column=0, columnspan=2)
+        tk.Button(self.frame, text="Submit", command=self.submit).grid(row=8, column=0, columnspan=2)
+        tk.Button(self.frame, text="Login", command=self.login).grid(row=9, column=0, columnspan=2)
 
     def submit(self):
         if not self.validate_input():
@@ -74,7 +75,7 @@ class SignUpWindow:
     def login(self):
         self.main.destroy()
         import Login
-        Login.Login()
+        Login.LoginWindow(self.main)
 
     def validate_input(self):
         # Email validation using regular expression
