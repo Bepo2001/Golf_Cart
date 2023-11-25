@@ -1,15 +1,12 @@
-
-
 import tkinter as tk
 from tkinter import ttk, messagebox
 import datetime
-import csv  # For CSV log (you may need to install the 'csv' module)
+import csv
 
 class UserWindow:
     def __init__(self, master):
         self.master = master
         self.master.title("User Panel")
-
         # Create tabs
         self.tabControl = ttk.Notebook(master)
         self.tab1 = ttk.Frame(self.tabControl)
@@ -32,7 +29,7 @@ class UserWindow:
     def create_reserve_tab(self):
         # Labels and entry widgets
         tk.Label(self.tab1, text="Select College:").grid(row=0, column=0, sticky="e")
-        colleges = ["College A", "College B", "College C"]  # Add your colleges here
+        colleges = ["College of Computer and Information Sciences", "College of Science", "College of Engineering", "College of Business Administration"]
         college_menu = tk.OptionMenu(self.tab1, self.selected_college, *colleges)
         college_menu.grid(row=0, column=1)
 
@@ -84,6 +81,7 @@ class UserWindow:
         # For now, assume the validation is successful
         return True
 
+
     def check_availability(self):
         # Dummy: Check availability in the central database
         # Replace this with your actual database check
@@ -115,7 +113,7 @@ class UserWindow:
         # Add logic to go back to the sign-up window or login window
         self.master.destroy()
         import Login
-        Login.Login(self.main)
+        Login.LoginWindow(self.master)
 
 # Create the main application window
 root = tk.Tk()
