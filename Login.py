@@ -25,6 +25,7 @@ class LoginWindow:
         tk.Button(self.frame, text="Login", command=self.login).grid(row=2, column=0, columnspan=2)
         tk.Button(self.frame, text="Sign Up", command=self.Sign_Up).grid(row=3, column=0, columnspan=2)
 
+
     def login(self):
         # Validate input
         if not self.validate_input():
@@ -36,11 +37,18 @@ class LoginWindow:
         entered_password = hashlib.sha256(self.password_entry.get().encode()).hexdigest()
 
         # Dummy: Check credentials against the central database (replace with actual database check)
-        conn=sqlite3.Connection("GolfDataBase.db")
-        farr=conn.execute("SELECT Password FROM UserData WHERE ID = "+ self.id_entry.get)
-        farr=list(farr)
-        if farr[0][0]==entered_password:
-             GO TO ADMIN
+        conn = sqlite3.Connection("GolfDataBase.db")
+        farr = conn.execute("SELECT Password, UserClass FROM UserData WHERE ID = "+ self.id_entry.get())
+        farr = list(farr)
+        if farr[0][0] == entered_password:
+            if farr[0][1] == "Admin":
+                self.main.destroy()
+                import Admin
+                Admin.AdminWindow(self.main)
+            else:
+                self.main.destroy()
+                import User
+                User.UserWindow(self.main)
         else:
             messagebox.showerror("error","ID or Password is incorrect")
 
