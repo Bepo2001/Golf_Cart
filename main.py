@@ -1,11 +1,11 @@
 import tkinter
 import sqlite3
 from tkinter import ttk
+import Signup
 
+# Admin id 4431015210, pass 12301230
+# Student ID 1111111111, Pass 12301230
 
-
-#Admin id 4431015210, pass 12301230
-#Student ID 1111111111, Pass 12301230
 
 conn = sqlite3.connect("GolfDataBase.db")
 conn.execute('''CREATE TABLE IF NOT EXISTS UserData
@@ -29,22 +29,15 @@ conn.execute('''CREATE TABLE IF NOT EXISTS Reservations
          FOREIGN KEY(PlateNumber) REFERENCES CareData(PlateNumber),
          FOREIGN KEY(ID) REFERENCES UserData(ID));''')
 
-class app:
-    def init(self):
-        self.main = tkinter.Tk()
-        self.main.title("Golf carts App")
-        self.employment_form = tkinter.LabelFrame(self.main, text="KSU Golf Carts",padx=120)
 
-        self.iframe = tkinter.Frame(self.employment_form,height=500,width=600)
-        self.employment_form.grid()
-        self.iframe.grid()
-        tkinter.Label(self.iframe, text="Welcome to the app!").grid(row=0, column=0, pady=5)
-        tkinter.Button(self.iframe, text="Sign up", width=10).grid(row=1, column=0, pady=10)
-        tkinter.Button(self.iframe, text="Login", width=10).grid(row=1, column=1, pady=10)
+class App:
+    def __init__(self):
+        self.main = tkinter.Tk()
+
+        Signup.SignUpWindow(self.main)
 
         self.main.mainloop()
 
 
-     # def change_page(self, page_name):
-     #     self.current_page.frame.destroy()
-     #     self.current_page = page_name(self)
+if __name__ == "__main__":
+    App()

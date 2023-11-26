@@ -3,13 +3,14 @@ from tkinter import messagebox
 import re
 import hashlib
 import sqlite3
+import Login
+
 
 class SignUpWindow:
     def __init__(self, main):
         self.main = main
         self.frame = tk.Frame(self.main)
         self.frame.grid()
-
 
         tk.Label(self.frame, text="First Name:").grid(row=0, column=0, sticky="e")
         tk.Label(self.frame, text="Last Name:").grid(row=1, column=0, sticky="e")
@@ -19,7 +20,6 @@ class SignUpWindow:
         tk.Label(self.frame, text="Email:").grid(row=6, column=0, sticky="e")
         tk.Label(self.frame, text="Phone Number:").grid(row=7, column=0, sticky="e")
 
-
         self.first_name_entry = tk.Entry(self.frame)
         self.last_name_entry = tk.Entry(self.frame)
         self.user_class_entry = tk.Entry(self.frame)
@@ -27,7 +27,6 @@ class SignUpWindow:
         self.password_entry = tk.Entry(self.frame, show="*")  # Hide password
         self.email_entry = tk.Entry(self.frame)
         self.phone_entry = tk.Entry(self.frame)
-
 
         self.first_name_entry.grid(row=0, column=1)
         self.last_name_entry.grid(row=1, column=1)
@@ -37,7 +36,6 @@ class SignUpWindow:
         self.email_entry.grid(row=6, column=1)
         self.phone_entry.grid(row=7, column=1)
 
-
         tk.Button(self.frame, text="Submit", command=self.submit).grid(row=8, column=0, columnspan=2)
         tk.Button(self.frame, text="Login", command=self.login).grid(row=9, column=0, columnspan=2)
 
@@ -45,25 +43,10 @@ class SignUpWindow:
         if not self.validate_input():
             return
 
-
         hashed_password = hashlib.sha256(self.password_entry.get().encode()).hexdigest()
-
-
-
-
-
-        print(f"User Information:\n"
-              f"First Name: {self.first_name_entry.get()}\n"
-              f"Last Name: {self.last_name_entry.get()}\n"
-              f"User Class: {self.user_class_entry.get()}\n"
-              f"Hashed Password: {hashed_password}\n"
-              f"Email: {self.email_entry.get()}\n"
-              f"Phone Number: {self.phone_entry.get()}")
-
         conn = sqlite3.connect("GolfDataBase.db")
-
         try:
-            insertion = "INSERT INTO UserData (ID, FName, LName, UserClass, Password, Email, PhoneNumber) VALUES (?, ?, ?, ?, ?, ?, ?)"
+            insertion = "INSERT INTO UserData (ID, FName, LName, UserClass, Password, Email, PhoneNumber) VALUES (?,?,?,?,?,?,?)"
 
             insertionValues = (self.id_entry.get(), self.first_name_entry.get(), self.last_name_entry.get(), self.user_class_entry.get(), hashed_password, self.email_entry.get(), self.phone_entry.get())
             conn.execute(insertion, insertionValues)
@@ -73,8 +56,7 @@ class SignUpWindow:
         conn.close()
 
     def login(self):
-        self.main.destroy()
-        import Login
+        self.frame.destroy()
         Login.LoginWindow(self.main)
 
     def validate_input(self):
@@ -92,10 +74,10 @@ class SignUpWindow:
 
         return True
 
-
-# Create the main application window
-root = tk.Tk()
-app = SignUpWindow(root)
-
-# Run the application
-root.mainloop()
+#
+# # Create the main application window
+# root = tk.Tk()
+# app = SignUpWindow(root)
+#
+# # Run the application
+# root.mainloop()

@@ -2,6 +2,9 @@ import hashlib
 import sqlite3
 import tkinter as tk
 from tkinter import messagebox
+import Signup
+import User
+import Admin
 
 class LoginWindow:
     def __init__(self, main):
@@ -31,8 +34,6 @@ class LoginWindow:
         if not self.validate_input():
             return
 
-
-
         # Hash the entered password
         entered_password = hashlib.sha256(self.password_entry.get().encode()).hexdigest()
 
@@ -42,20 +43,18 @@ class LoginWindow:
         farr = list(farr)
         if farr[0][0] == entered_password:
             if farr[0][1] == "Admin":
-                self.main.destroy()
-                import Admin
+                self.frame.destroy()
                 Admin.AdminWindow(self.main)
             else:
-                self.main.destroy()
-                import User
-                User.UserWindow(self.main)
+                self.frame.destroy()
+                User.UserWindow(self.main, {"user_id": self.id_entry.get()})
         else:
             messagebox.showerror("error","ID or Password is incorrect")
 
     def Sign_Up(self):
-        self.main.destroy()
-        import Signup
+        self.frame.destroy()
         Signup.SignUpWindow(self.main)
+
     def validate_input(self):
         # ID validation
         if not self.id_entry.get().isdigit() or \
@@ -71,10 +70,10 @@ class LoginWindow:
         return True
 
 
-
-# Create the main application window
-root = tk.Tk()
-app = LoginWindow(root)
-
-# Run the application
-root.mainloop()
+#
+# # Create the main application window
+# root = tk.Tk()
+# app = LoginWindow(root)
+#
+# # Run the application
+# root.mainloop()

@@ -2,13 +2,18 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import datetime
 import csv
+import Login
+
 
 class UserWindow:
-    def __init__(self, master):
-        self.master = master
-        self.master.title("User Panel")
+    def __init__(self, main, data):
+        self.main = main
+        self.data = data # self.data.get("user_id")
+        self.main.title("User Panel")
+        self.frame = tk.Frame(self.main)
+        self.frame.grid()
         # Create tabs
-        self.tabControl = ttk.Notebook(master)
+        self.tabControl = ttk.Notebook(self.frame)
         self.tab1 = ttk.Frame(self.tabControl)
         self.tab2 = ttk.Frame(self.tabControl)
         self.tabControl.add(self.tab1, text="Reserve a Cart")
@@ -111,13 +116,5 @@ class UserWindow:
 
     def logout(self):
         # Add logic to go back to the sign-up window or login window
-        self.master.destroy()
-        import Login
-        Login.LoginWindow(self.master)
-
-# Create the main application window
-root = tk.Tk()
-app = UserWindow(root)
-
-# Run the application
-root.mainloop()
+        self.frame.destroy()
+        Login.LoginWindow(self.main)
