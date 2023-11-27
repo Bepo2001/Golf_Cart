@@ -6,9 +6,9 @@ import Login
 
 
 class UserWindow:
-    def __init__(self, main, data):
+    def __init__(self, main, user_id):
         self.main = main
-        self.data = data # self.data.get("user_id")
+        self.user_id = user_id
         self.main.title("User Panel")
         self.frame = tk.Frame(self.main)
         self.frame.grid()
@@ -51,8 +51,6 @@ class UserWindow:
         tk.Button(self.tab1, text="Logout", command=self.logout).grid(row=4, column=0, columnspan=2)
 
     def create_view_reservations_tab(self):
-        # Placeholder for the View My Reservations tab
-        # You can add the necessary UI elements and logic based on your requirements
         tk.Label(self.tab2, text="View My Reservations Tab").pack()
 
         # Show button
@@ -115,6 +113,5 @@ class UserWindow:
             csvwriter.writerows(transaction_data)
 
     def logout(self):
-        # Add logic to go back to the sign-up window or login window
         self.frame.destroy()
         Login.LoginWindow(self.main)

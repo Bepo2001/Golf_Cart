@@ -42,12 +42,13 @@ class LoginWindow:
         farr = conn.execute("SELECT Password, UserClass FROM UserData WHERE ID = "+ self.id_entry.get())
         farr = list(farr)
         if farr[0][0] == entered_password:
+            user_id = self.id_entry.get()
             if farr[0][1] == "Admin":
                 self.frame.destroy()
                 Admin.AdminWindow(self.main)
             else:
                 self.frame.destroy()
-                User.UserWindow(self.main, {"user_id": self.id_entry.get()})
+                User.UserWindow(self.main, user_id=user_id)
         else:
             messagebox.showerror("error","ID or Password is incorrect")
 
