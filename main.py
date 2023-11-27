@@ -26,7 +26,7 @@ conn.execute('''CREATE TABLE IF NOT EXISTS Reservations
          ID INT NOT NULL,
          StartDate TIMESTAMP NOT NULL,
          EndDate TIMESTAMP NOT NULL,
-         FOREIGN KEY(PlateNumber) REFERENCES CareData(PlateNumber),
+         FOREIGN KEY(PlateNumber) REFERENCES CartData(PlateNumber),
          FOREIGN KEY(ID) REFERENCES UserData(ID));''')
 
 
