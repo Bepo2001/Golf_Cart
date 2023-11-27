@@ -9,11 +9,11 @@ class AdminWindow:
         self.main = main
         self.main.title("Admin Panel")
 
-        self.frame = tk.Frame(self.main)
-        self.frame.grid()
+        self.frame = tk.Frame(self.main, padx=10, pady=10)
+        self.frame.grid(row=0, column=0, sticky="nsew")
         # Labels
-        tk.Label(main, text="Golf Cart Plate Number:").grid(row=0, column=0, sticky="e")
-        tk.Label(main, text="College:").grid(row=1, column=0, sticky="e")
+        tk.Label(self.frame, text="Golf Cart Plate Number:").grid(row=0, column=0, sticky="e")
+        tk.Label(self.frame, text="College:").grid(row=1, column=0, sticky="e")
 
         self.plate_number_entry = tk.Entry(self.frame)
         self.selected_college = tk.StringVar()
@@ -22,13 +22,22 @@ class AdminWindow:
         self.college_menu = tk.OptionMenu(self.frame, self.selected_college, *colleges)
 
         # Grid layout for entry widgets
-        self.plate_number_entry.grid(row=0, column=1)
-        self.college_menu.grid(row=1, column=1)
+        self.plate_number_entry.grid(row=0, column=1, padx=5, pady=5)
+        self.college_menu.grid(row=1, column=1, padx=5, pady=5)
 
         # Buttons
-        tk.Button(main, text="Create", command=self.create_record).grid(row=2, column=0, columnspan=2)
-        tk.Button(main, text="Logout", command=self.logout).grid(row=3, column=0, columnspan=2)
-        tk.Button(main, text="Backup", command=self.backup).grid(row=4, column=0, columnspan=2)
+        tk.Button(main, text="Create", command=self.create_record).grid(row=2, column=0, columnspan=2, pady=7)
+        tk.Button(main, text="Logout", command=self.logout).grid(row=3, column=0, columnspan=2, pady=7)
+        tk.Button(main, text="Backup", command=self.backup).grid(row=4, column=0, columnspan=2, pady=7)
+
+        # Column and Row Weights to allow resizing
+        self.frame.columnconfigure(0, weight=1)
+        self.frame.columnconfigure(1, weight=1)
+        self.frame.rowconfigure(0, weight=1)
+        self.frame.rowconfigure(1, weight=1)
+        self.frame.rowconfigure(2, weight=1)
+        self.frame.rowconfigure(3, weight=1)
+        self.frame.rowconfigure(4, weight=1)
 
     def create_record(self):
         # Dummy: Send information to the central database (replace with actual database interaction)     (((DONE)))
@@ -39,6 +48,7 @@ class AdminWindow:
             insertionValues = (self.plate_number_entry.get(), self.selected_college.get())
             conn.execute(insertion, insertionValues)
             conn.commit()
+            messagebox.showinfo("Created", "Cart has been added successfully.")
         except sqlite3.IntegrityError:
             messagebox.showerror("Error", "Plate Number Already Exists!!")
         conn.close()
