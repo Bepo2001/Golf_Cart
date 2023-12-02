@@ -26,9 +26,9 @@ class AdminWindow:
         self.college_menu.grid(row=1, column=1, padx=5, pady=5)
 
         # Buttons
-        tk.Button(main, text="Create", command=self.create_record).grid(row=2, column=0, columnspan=2, pady=7)
-        tk.Button(main, text="Logout", command=self.logout).grid(row=3, column=0, columnspan=2, pady=7)
-        tk.Button(main, text="Backup", command=self.backup).grid(row=4, column=0, columnspan=2, pady=7)
+        tk.Button(self.frame, text="Create", command=self.create_record).grid(row=2, column=0, columnspan=2, pady=7)
+        tk.Button(self.frame, text="Logout", command=self.logout).grid(row=3, column=0, columnspan=2, pady=7)
+        tk.Button(self.frame, text="Backup", command=self.backup).grid(row=4, column=0, columnspan=2, pady=7)
 
         # Column and Row Weights to allow resizing
         self.frame.columnconfigure(0, weight=1)

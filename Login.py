@@ -37,7 +37,6 @@ class LoginWindow:
         # Hash the entered password
         entered_password = hashlib.sha256(self.password_entry.get().encode()).hexdigest()
 
-        # Dummy: Check credentials against the central database (replace with actual database check)
         conn = sqlite3.Connection("GolfDataBase.db")
         farr = conn.execute("SELECT Password, UserClass FROM UserData WHERE ID = "+ self.id_entry.get())
         farr = list(farr)
@@ -48,7 +47,7 @@ class LoginWindow:
                 Admin.AdminWindow(self.main)
             else:
                 self.frame.destroy()
-                User.UserWindow(self.main, user_id=user_id)
+                User.UserWindow(self.main, user_id=user_id,user_class=farr[0][1])
         else:
             messagebox.showerror("error","ID or Password is incorrect")
 
