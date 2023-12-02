@@ -1,14 +1,26 @@
+import sqlite3
 import tkinter as tk
 from tkinter import ttk, messagebox
-import datetime
+from datetime import datetime
 import csv
 import Login
+from tkcalendar import DateEntry, Calendar
+import logging
 
+# start_time = datetime(2023, 11, 30, 22, 0)
+# end_time = datetime(2023, 11,30,23, 0)
+# query = "INSERT INTO Resv VALUES (?,?,?,?)"
+# values = ("plate_number", "id", start_time, end_time)
+#
+# conn.execute(query, values)
+#
+# (datetime.strptime(date, "%Y-%m-%d %H:%M:%S") > start_date > datetime.strptime(date, "%Y-%m-%d %H:%M:%S")) and (datetime.strptime(date, "%Y-%m-%d %H:%M:%S") > start_date > datetime.strptime(date, "%Y-%m-%d %H:%M:%S")) and (datetime.strptime(date, "%Y-%m-%d %H:%M:%S") > start_date > datetime.strptime(date, "%Y-%m-%d %H:%M:%S"))
 
 class UserWindow:
-    def __init__(self, main, user_id):
+    def __init__(self, main, user_id,user_class):
         self.main = main
         self.user_id = user_id
+        self.user_class=user_class
         self.main.title("User Panel")
         self.frame = tk.Frame(self.main)
         self.frame.grid()
@@ -38,11 +50,23 @@ class UserWindow:
         college_menu = tk.OptionMenu(self.tab1, self.selected_college, *colleges)
         college_menu.grid(row=0, column=1)
 
-        tk.Label(self.tab1, text="Start Time & Date:").grid(row=1, column=0, sticky="e")
-        tk.Entry(self.tab1, textvariable=self.start_time_var).grid(row=1, column=1)
+        self.start_date = DateEntry(self.tab1)
+        self.start_date.grid(pady=20)
 
-        tk.Label(self.tab1, text="End Time & Date:").grid(row=2, column=0, sticky="e")
-        tk.Entry(self.tab1, textvariable=self.end_time_var).grid(row=2, column=1)
+        self.end_date = DateEntry(self.tab1)
+        self.end_date.grid(pady=20)
+
+        self.start_hour = tk.StringVar()
+        tk.Entry(self.tab1, textvariable=self.start_hour, width=3).grid()
+
+        self.start_min = tk.StringVar()
+        tk.Entry(self.tab1, textvariable=self.start_min, width=3).grid()
+
+        self.end_hour = tk.StringVar()
+        tk.Entry(self.tab1, textvariable=self.end_hour, width=3).grid()
+
+        self.end_min = tk.StringVar()
+        tk.Entry(self.tab1, textvariable=self.end_min, width=3).grid()
 
         # Reserve button
         tk.Button(self.tab1, text="Reserve", command=self.reserve_cart).grid(row=3, column=0, columnspan=2)
@@ -60,57 +84,53 @@ class UserWindow:
         tk.Button(self.tab2, text="Logout", command=self.logout).pack()
 
     def reserve_cart(self):
-        # Dummy: Implement reservation logic based on the provided rules
-        # Replace the following code with your actual reservation logic
-
-        # Check reservation period validity
-        if not self.validate_reservation_period():
-            return
-
-        # Dummy: Check availability in the central database (replace with actual database check)
-        if self.check_availability():
-            # Dummy: Reserve the cart and log the transaction
-            self.log_transaction("success")
-            messagebox.showinfo("Success", "Cart reserved successfully!")
+        start_datetime = datetime(int(self.start_date.get().split("/")[2]) + 2000, int(self.start_date.get().split("/")[0]), int(self.start_date.get().split("/")[1]), int(self.start_hour.get()), int(self.start_min.get()))
+        end_datetime = datetime(int(self.end_date.get().split("/")[2]) + 2000, int(self.end_date.get().split("/")[0]), int(self.end_date.get().split("/")[1]), int(self.end_hour.get()), int(self.end_min.get()))
+        maxFaculty = datetime(1, 1, 1, 1, 30) - datetime(1, 1, 1, 0, 0)
+        maxEmployees = datetime(1, 1, 1, 1, 0) - datetime(1, 1, 1, 0, 0)
+        maxStudents = datetime(1, 1, 1, 0, 30) - datetime(1, 1, 1, 0, 0)
+        reserveTime = end_datetime - start_datetime
+        if reserveTime > maxFaculty :
+            print()
+        elif self.user_class=="Employees" and reserveTime > maxEmployees:
+            print()
+        elif self.user_class=="St;udent" and reserveTime > maxStudents:
+            print()
         else:
-            # Dummy: Log the transaction for a failed reservation
-            self.log_transaction("failure")
-            messagebox.showerror("Error", "Cart not available for the given time & date.")
+            conn = sqlite3.connect("GolfDataBase.db")
+            sql="SELECT PlateNumber FROM CartData WHERE College = ?"
+            sol=(self.selected_college.get(),)
+            sil=list(conn.execute(sql,sol))
+            for x in sil:
+                print(x)
+                spl = "SELECT StartDate,EndDate FROM Reservations WHERE PlateNumber = ?"
+                sll = x
+                skl = list(conn.execute(spl, sll))
+                flag=True
+                for y in skl:
+                    y=list(y)
+                    start=datetime.strptime(y[0],'%Y-%m-%d %H:%M:%S')
+                    end=datetime.strptime(y[1],'%Y-%m-%d %H:%M:%S')
 
-    def validate_reservation_period(self):
-        # Dummy: Validate reservation period based on user class
-        # Replace this with your actual validation logic
-
-        # For now, assume the validation is successful
-        return True
-
-
-    def check_availability(self):
-        # Dummy: Check availability in the central database
-        # Replace this with your actual database check
-        # For now, assume the cart is available
-        return True
 
     def show_reservations(self):
-        # Dummy: Show reservations for the user
-        # Replace this with your actual logic to retrieve and display reservations
-        messagebox.showinfo("Reservations", "No reservations to display.")
-
-    def log_transaction(self, status):
-        # Dummy: Log transaction to a CSV file (replace with actual logging mechanism)
-        transaction_data = [
-            [datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-             "User ID Placeholder",  # Replace with the actual user ID
-             "Golf Cart Plate Placeholder",  # Replace with the actual plate number
-             self.selected_college.get(),
-             self.start_time_var.get(),
-             self.end_time_var.get(),
-             status]
-        ]
-
-        with open('transaction_log.csv', 'a', newline='') as csvfile:
-            csvwriter = csv.writer(csvfile)
-            csvwriter.writerows(transaction_data)
+        conn = sqlite3.Connection("GolfDataBase.db")
+        farr = conn.execute(
+            "SELECT Reservations.PlateNumber,College,StartDate,EndDate FROM Reservations LEFT JOIN CartData ON Reservations.PlateNumber=CartData.PlateNumber WHERE ID = " + self.user_id)
+        farr = list(farr)
+        self.window = tk.Tk()
+        self.select_reserve = ttk.Treeview(self.window, height=7, columns=(1, 2, 3, 4), show="headings")
+        self.select_reserve.heading(1, text="Plate Number")
+        self.select_reserve.column(1, minwidth=0, width=100, anchor=tk.CENTER)
+        self.select_reserve.heading(2, text="Location")
+        self.select_reserve.column(2, minwidth=0, width=110, anchor=tk.CENTER)
+        self.select_reserve.heading(3, text="Start Time")
+        self.select_reserve.column(3, minwidth=0, width=120, anchor=tk.CENTER)
+        self.select_reserve.heading(4, text="End Time")
+        self.select_reserve.column(4, minwidth=0, width=120, anchor=tk.CENTER)
+        self.select_reserve.pack()
+        for x in farr:
+            self.select_reserve.insert(parent="", index=0, values=(x[0], x[1], x[2], x[3]))
 
     def logout(self):
         self.frame.destroy()
