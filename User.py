@@ -91,18 +91,17 @@ class UserWindow:
         maxStudents = datetime(1, 1, 1, 0, 30) - datetime(1, 1, 1, 0, 0)
         reserveTime = end_datetime - start_datetime
         if reserveTime > maxFaculty :
-            print()
+            return messagebox.showerror(title="Time exceed",message="you can't reserve a cart for that long time")
         elif self.user_class=="Employees" and reserveTime > maxEmployees:
-            print()
-        elif self.user_class=="St;udent" and reserveTime > maxStudents:
-            print()
+            return messagebox.showerror(title="Time exceed",message="you can't reserve a cart for that long time")
+        elif self.user_class=="Student" and reserveTime > maxStudents:
+            return messagebox.showerror(title="Time exceed",message="you can't reserve a cart for that long time")
         else:
             conn = sqlite3.connect("GolfDataBase.db")
             sql="SELECT PlateNumber FROM CartData WHERE College = ?"
             sol=(self.selected_college.get(),)
             sil=list(conn.execute(sql,sol))
             for x in sil:
-                print(x)
                 spl = "SELECT StartDate,EndDate FROM Reservations WHERE PlateNumber = ?"
                 sll = x
                 skl = list(conn.execute(spl, sll))
@@ -111,7 +110,23 @@ class UserWindow:
                     y=list(y)
                     start=datetime.strptime(y[0],'%Y-%m-%d %H:%M:%S')
                     end=datetime.strptime(y[1],'%Y-%m-%d %H:%M:%S')
+                    if start <= start_datetime <= end:
+                        flag = False
+                    elif start <= end_datetime <= end:
+                        flag = False
+                    elif start_datetime <= start and end_datetime >= end:
+                        flag = False
 
+                if flag == True:
+                    sql = "INSERT INTO reservations (PlateNumber, ID, StartDate, EndDate) VALUES (?,?,?,?)"
+                    values = (x[0], self.user_id, start_datetime, end_datetime)
+                    print(values)
+                    conn.execute(sql, values)
+                    conn.commit()
+                    print(x[0], self.user_id, start_datetime, end_datetime)
+                    return messagebox.showinfo(title="reserve succeed!",message="your reserve has been reserved")
+
+            return messagebox.showinfo(title="couldn't reserve", message="sorry no cart from this college available")
 
     def show_reservations(self):
         conn = sqlite3.Connection("GolfDataBase.db")
