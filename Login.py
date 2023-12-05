@@ -9,24 +9,35 @@ import Admin
 class LoginWindow:
     def __init__(self, main):
         self.main = main
-        self.frame = tk.Frame(self.main)
-        self.frame.grid()
+        self.main.title("Login Panel")
+        # self.main.columnconfigure(0, weight=1)
+        # self.main.rowconfigure(0, weight=1)
+        self.frame = tk.Frame(self.main, bg="#add8e6")
+        self.frame.grid(sticky="ns")
+
+
+        welcome_font = ("Helvetica", 20, "bold")
+        font = ("Helvetica", 14)
+        button_font = ("Helvetica", 13)
+        light_blue = "#add8e6"
 
         # Labels
-        tk.Label(self.frame, text="ID:").grid(row=0, column=0, sticky="e")
-        tk.Label(self.frame, text="Password:").grid(row=1, column=0, sticky="e")
+        tk.Label(self.frame, text="Welcome Back", font=welcome_font, bg=light_blue).grid(row=0, column=0, columnspan=3, pady=70, sticky="n")
+        tk.Label(self.frame, text="ID:", font=font, bg=light_blue).grid(row=1, column=0, sticky="e", pady=5, padx=3)
+        tk.Label(self.frame, text="Password:", font=font, bg=light_blue).grid(row=2, column=0, sticky="e", pady=5, padx=3)
+        tk.Label(self.frame, text="Don't have an account ?", font=font, bg=light_blue).grid(row=7, column=1, sticky="w", pady=5)
 
         # Entry widgets
-        self.id_entry = tk.Entry(self.frame)
-        self.password_entry = tk.Entry(self.frame, show="*")  # Hide password
+        self.id_entry = tk.Entry(self.frame, font=font)
+        self.password_entry = tk.Entry(self.frame, show="*", font=font)  # Hide password
 
         # Grid layout for entry widgets
-        self.id_entry.grid(row=0, column=1)
-        self.password_entry.grid(row=1, column=1)
+        self.id_entry.grid(row=1, column=1, sticky="e", pady=5, padx=3)
+        self.password_entry.grid(row=2, column=1, sticky="e", pady=5, padx=3)
 
         # Login button
-        tk.Button(self.frame, text="Login", command=self.login).grid(row=2, column=0, columnspan=2)
-        tk.Button(self.frame, text="Sign Up", command=self.Sign_Up).grid(row=3, column=0, columnspan=2)
+        tk.Button(self.frame, text="Login", command=self.login, font=button_font).grid(row=5, column=1, pady=15)
+        tk.Button(self.frame, text="Sign Up", command=self.Sign_Up, font=button_font).grid(row=7, column=2, columnspan=1, sticky="w", pady=20)
 
 
     def login(self):
