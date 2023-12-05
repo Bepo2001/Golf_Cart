@@ -19,17 +19,28 @@ import logging
 class UserWindow:
     def __init__(self, main, user_id,user_class):
         self.main = main
-        self.user_id = user_id
-        self.user_class=user_class
+        self.main.configure(bg="#add8e6")
         self.main.title("User Panel")
-        self.frame = tk.Frame(self.main)
-        self.frame.grid()
+        self.frame = tk.Frame(self.main, bg="#add8e6")
+        self.frame.grid(sticky="nsew")
+
+        self.user_id = user_id
+        self.user_class = user_class
+
         # Create tabs
         self.tabControl = ttk.Notebook(self.frame)
         self.tab1 = ttk.Frame(self.tabControl)
         self.tab2 = ttk.Frame(self.tabControl)
         self.tabControl.add(self.tab1, text="Reserve a Cart")
         self.tabControl.add(self.tab2, text="View My Reservations")
+        self.tabControl.grid(column=1, sticky="nsew")
+        self.tabControl.pack(expand=1, fill="both")
+
+        # Configure the style for the Notebook
+        style = ttk.Style()
+        style.configure('TNotebook', background='#add8e6')
+        style.configure('TNotebook.Tab', background='#add8e6', font=('Helvetica', 12))
+
         self.tabControl.pack(expand=1, fill="both")
 
         # Variables for reservation details
@@ -44,44 +55,68 @@ class UserWindow:
         self.create_view_reservations_tab()
 
     def create_reserve_tab(self):
+
+        font = ("Helvetica", 12)
+        light_blue = "#add8e6"
+
+        # Create a frame for the content of the tab
+        reserve_frame = tk.Frame(self.tab1, bg=light_blue)
+        reserve_frame.grid(row=0, column=0)
+        reserve_frame.columnconfigure(0, weight=2)
+
         # Labels and entry widgets
-        tk.Label(self.tab1, text="Select College:").grid(row=0, column=0, sticky="e")
+        tk.Label(reserve_frame, text="Select College:", bg=light_blue, font=font).grid(row=0, column=0, sticky="e")
         colleges = ["College of Computer and Information Sciences", "College of Science", "College of Engineering", "College of Business Administration"]
-        college_menu = tk.OptionMenu(self.tab1, self.selected_college, *colleges)
-        college_menu.grid(row=0, column=1)
+        college_menu = tk.OptionMenu(reserve_frame, self.selected_college, *colleges)
+        college_menu.grid(row=0, column=1, ipadx=50, pady=7)
 
-        self.start_date = DateEntry(self.tab1)
-        self.start_date.grid(pady=20)
+        tk.Label(reserve_frame, text="Choose Start Date:", bg=light_blue, font=font).grid(row=1, column=0, pady=20, sticky="e")
+        self.start_date = DateEntry(reserve_frame, font=font, bg=light_blue)
+        self.start_date.grid(row=1, column=1, pady=20)
 
-        self.end_date = DateEntry(self.tab1)
-        self.end_date.grid(pady=20)
+        tk.Label(reserve_frame, text="Choose End Date:", bg=light_blue, font=font).grid(row=2, column=0, pady=20, sticky="e")
+        self.end_date = DateEntry(reserve_frame, font=font, bg=light_blue)
+        self.end_date.grid(row=2, column=1, pady=20)
 
+        tk.Label(reserve_frame, text="Start Hour:", bg=light_blue, font=font).grid(row=3, column=0, pady=10, sticky="e")
         self.start_hour = tk.StringVar()
-        tk.Entry(self.tab1, textvariable=self.start_hour, width=3).grid()
+        tk.Entry(reserve_frame, textvariable=self.start_hour, font=font).grid(row=3, column=1, pady=10)
 
+        tk.Label(reserve_frame, text="Start Min:", bg=light_blue, font=font).grid(row=4, column=0, pady=10, sticky="e")
         self.start_min = tk.StringVar()
-        tk.Entry(self.tab1, textvariable=self.start_min, width=3).grid()
+        tk.Entry(reserve_frame, textvariable=self.start_min, font=font).grid(row=4, column=1, pady=10)
 
+        tk.Label(reserve_frame, text="End Hour:", bg=light_blue, font=font).grid(row=5, column=0, pady=10, sticky="e")
         self.end_hour = tk.StringVar()
-        tk.Entry(self.tab1, textvariable=self.end_hour, width=3).grid()
+        tk.Entry(reserve_frame, textvariable=self.end_hour, font=font).grid(row=5, column=1, pady=10)
 
+        tk.Label(reserve_frame, text="End Min:", bg=light_blue, font=font).grid(row=6, column=0, pady=10, sticky="e")
         self.end_min = tk.StringVar()
-        tk.Entry(self.tab1, textvariable=self.end_min, width=3).grid()
+        tk.Entry(reserve_frame, textvariable=self.end_min, font=font).grid(row=6, column=1, pady=10)
 
         # Reserve button
-        tk.Button(self.tab1, text="Reserve", command=self.reserve_cart).grid(row=3, column=0, columnspan=2)
+        tk.Button(reserve_frame, text="Reserve", command=self.reserve_cart, font=font).grid(row=7, column=0, columnspan=2, pady=10)
 
         # Logout button
-        tk.Button(self.tab1, text="Logout", command=self.logout).grid(row=4, column=0, columnspan=2)
+        tk.Button(reserve_frame, text="Logout", command=self.logout, font=font).grid(row=8, column=0, columnspan=2, pady=30)
+
+        tk.Entry(reserve_frame, bg=light_blue).grid(column=10, sticky="e")
+        tk.Entry(reserve_frame, bg=light_blue).grid(column=11, sticky="e")
 
     def create_view_reservations_tab(self):
-        tk.Label(self.tab2, text="View My Reservations Tab").pack()
+
+        view_reservations_frame = tk.Frame(self.tab2, bg="#add8e6")
+        view_reservations_frame.pack(expand=1, fill="both")
+
+        tk.Label(view_reservations_frame, text="              View My Reservations", font=("Helvetica", 20, "bold"), bg="#add8e6").grid(row=0, column=0, pady=20, sticky="w")
 
         # Show button
-        tk.Button(self.tab2, text="Show", command=self.show_reservations).pack()
+        tk.Button(view_reservations_frame, text="View", command=self.show_reservations, font=("Helvetica", 12)).grid(row=1, column=0, pady=10)
 
         # Logout button
-        tk.Button(self.tab2, text="Logout", command=self.logout).pack()
+        tk.Button(view_reservations_frame, text="Logout", command=self.logout, font=("Helvetica", 12)).grid(row=2, column=0, pady=10)
+
+        view_reservations_frame.columnconfigure(0, weight=1)
 
     def reserve_cart(self):
         start_datetime = datetime(int(self.start_date.get().split("/")[2]) + 2000, int(self.start_date.get().split("/")[0]), int(self.start_date.get().split("/")[1]), int(self.start_hour.get()), int(self.start_min.get()))

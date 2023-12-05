@@ -9,7 +9,7 @@ import Login
 class SignUpWindow:
     def __init__(self, main):
         self.main = main
-        self.main.title("Sign Up")
+        self.main.title("Signup Panel")
         self.main.geometry("500x500")
         self.main.configure(bg="#add8e6")  # Hexadecimal code for light blue
         self.main.columnconfigure(0, weight=1)
@@ -33,7 +33,10 @@ class SignUpWindow:
 
         self.first_name_entry = tk.Entry(self.frame, font=font)
         self.last_name_entry = tk.Entry(self.frame, font=font)
-        self.user_class_entry = tk.Entry(self.frame, font=font)
+        #self.user_class_entry = tk.Entry(self.frame, font=font)
+        self.selected_class = tk.StringVar()
+        Classes = ["Student", "Employee", "Faculty", "Admin"]
+        self.college_menu = tk.OptionMenu(self.frame, self.selected_class, *Classes)
         self.id_entry = tk.Entry(self.frame, font=font)
         self.password_entry = tk.Entry(self.frame, show="*", font=font)  # Hide password
         self.email_entry = tk.Entry(self.frame, font=font)
@@ -41,7 +44,7 @@ class SignUpWindow:
 
         self.first_name_entry.grid(row=1, column=1, pady=5)
         self.last_name_entry.grid(row=2, column=1, pady=5)
-        self.user_class_entry.grid(row=3, column=1, pady=5)
+        self.college_menu.grid(row=3, column=1, pady=5, ipadx=25)
         self.id_entry.grid(row=4, column=1, pady=3)
         self.password_entry.grid(row=5, column=1, pady=5)
         self.email_entry.grid(row=6, column=1, pady=5)
@@ -60,7 +63,7 @@ class SignUpWindow:
         try:
             insertion = "INSERT INTO UserData (ID, FName, LName, UserClass, Password, Email, PhoneNumber) VALUES (?,?,?,?,?,?,?)"
 
-            insertionValues = (self.id_entry.get(), self.first_name_entry.get(), self.last_name_entry.get(), self.user_class_entry.get(), hashed_password, self.email_entry.get(), self.phone_entry.get())
+            insertionValues = (self.id_entry.get(), self.first_name_entry.get(), self.last_name_entry.get(), self.selected_class.get(), hashed_password, self.email_entry.get(), self.phone_entry.get())
             conn.execute(insertion, insertionValues)
             conn.commit()
             messagebox.showinfo("Success", "Your Account Has Been Created Successfully!.")
@@ -86,7 +89,7 @@ class SignUpWindow:
             return False
 
         # Check for valid user classes
-        user_class = self.user_class_entry.get().lower()
+        user_class = self.selected_class.get().lower()
         valid_user_classes = ["student", "faculty", "employee", "admin"]
         if user_class not in valid_user_classes:
             messagebox.showerror("Error", "Invalid user class. Please choose Student, Faculty, Employee, or Admin.")
