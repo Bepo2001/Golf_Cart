@@ -90,7 +90,7 @@ class SignUpWindow:
 
         # Check for valid user classes
         user_class = self.selected_class.get().lower()
-        valid_user_classes = ["student", "faculty", "employee", "admin"]
+        valid_user_classes = ["student", "faculty", "employee"]
         if user_class not in valid_user_classes:
             messagebox.showerror("Error", "Invalid user class. Please choose Student, Faculty, Employee, or Admin.")
             return False
