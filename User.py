@@ -61,8 +61,7 @@ class UserWindow:
 
         # Create a frame for the content of the tab
         reserve_frame = tk.Frame(self.tab1, bg=light_blue)
-        reserve_frame.grid(row=0, column=0)
-        reserve_frame.columnconfigure(0, weight=2)
+        reserve_frame.pack(expand=1, fill="both")
 
         # Labels and entry widgets
         tk.Label(reserve_frame, text="Select College:", bg=light_blue, font=font).grid(row=0, column=0, sticky="e")
@@ -100,8 +99,8 @@ class UserWindow:
         # Logout button
         tk.Button(reserve_frame, text="Logout", command=self.logout, font=font).grid(row=8, column=0, columnspan=2, pady=30)
 
-        tk.Entry(reserve_frame, bg=light_blue).grid(column=10, sticky="e")
-        tk.Entry(reserve_frame, bg=light_blue).grid(column=11, sticky="e")
+        # tk.Entry(reserve_frame, bg=light_blue).grid(column=10, sticky="e")
+        # tk.Entry(reserve_frame, bg=light_blue).grid(column=11, sticky="e")
 
     def create_view_reservations_tab(self):
 
