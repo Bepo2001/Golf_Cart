@@ -118,6 +118,7 @@ class UserWindow:
         view_reservations_frame.columnconfigure(0, weight=1)
 
     def reserve_cart(self):
+        logging.basicConfig(filename='cart.log',filemode='a',format='%(asctime)s - %(levelname)s - %(message)s',level=logging.DEBUG)
         start_datetime = datetime(int(self.start_date.get().split("/")[2]) + 2000, int(self.start_date.get().split("/")[0]), int(self.start_date.get().split("/")[1]), int(self.start_hour.get()), int(self.start_min.get()))
         end_datetime = datetime(int(self.end_date.get().split("/")[2]) + 2000, int(self.end_date.get().split("/")[0]), int(self.end_date.get().split("/")[1]), int(self.end_hour.get()), int(self.end_min.get()))
         maxFaculty = datetime(1, 1, 1, 1, 30) - datetime(1, 1, 1, 0, 0)
@@ -158,8 +159,9 @@ class UserWindow:
                     conn.execute(sql, values)
                     conn.commit()
                     print(x[0], self.user_id, start_datetime, end_datetime)
+                    logging.info("the cart has been reserved")
                     return messagebox.showinfo(title="reserve succeed!",message="your reserve has been reserved")
-
+            logging.info("the cart hasn't been reserved")
             return messagebox.showinfo(title="couldn't reserve", message="sorry no cart from this college available")
 
     def show_reservations(self):
